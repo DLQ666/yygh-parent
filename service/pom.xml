@@ -12,6 +12,7 @@
     <modules>
         <module>service-user</module>
         <module>service-user</module>
+        <module>service-hosp</module>
     </modules>
 
     <artifactId>service</artifactId>
@@ -47,6 +48,10 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
         <!-- 流量控制 -->
         <dependency>
