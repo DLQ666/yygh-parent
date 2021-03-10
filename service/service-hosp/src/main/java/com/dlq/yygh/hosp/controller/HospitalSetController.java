@@ -1,5 +1,6 @@
 package com.dlq.yygh.hosp.controller;
 
+import com.dlq.yygh.common.result.Result;
 import com.dlq.yygh.hosp.service.HospitalSetService;
 import com.dlq.yygh.model.hosp.HospitalSet;
 import io.swagger.annotations.Api;
@@ -25,15 +26,20 @@ public class HospitalSetController {
 
     @ApiOperation(value = "获取所有医院设置")
     @GetMapping("/findAll")
-    public List<HospitalSet> findAllHospitalSet() {
+    public Result<List<HospitalSet>> findAllHospitalSet() {
         List<HospitalSet> list = hospitalSetService.list();
-        return list;
+        return Result.ok(list);
     }
 
     @ApiOperation(value = "逻辑删除医院设置")
     @DeleteMapping("/{id}")
-    public boolean deleteHospitalSet(@PathVariable("id") Long id) {
+    public Result<Boolean> deleteHospitalSet(@PathVariable("id") Long id) {
         boolean flag = hospitalSetService.removeById(id);
-        return flag;
+        if (flag){
+            return Result.ok();
+        }else {
+            return Result.fail();
+        }
+
     }
 }
