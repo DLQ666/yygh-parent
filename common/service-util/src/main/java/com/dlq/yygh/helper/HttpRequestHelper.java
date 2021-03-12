@@ -1,6 +1,7 @@
 package com.dlq.yygh.helper;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dlq.yygh.utils.HttpUtil;
 import com.dlq.yygh.utils.MD5;
 import lombok.extern.slf4j.Slf4j;
 
