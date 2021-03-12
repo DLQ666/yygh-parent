@@ -15,3 +15,6 @@
 #    nacos:
 #      discovery:
 #        server-addr: dlqk8s.top:8848
+#  data:
+#    mongodb:
+#      uri: mongodb://yygh_hosp:dlq.*123@182.42.109.129:27017/yygh_hosp
