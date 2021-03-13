@@ -7,11 +7,13 @@ import com.dlq.yygh.helper.HttpRequestHelper;
 import com.dlq.yygh.hosp.service.DepartmentService;
 import com.dlq.yygh.hosp.service.HospitalService;
 import com.dlq.yygh.hosp.service.HospitalSetService;
+import com.dlq.yygh.hosp.service.ScheduleService;
 import com.dlq.yygh.model.hosp.Department;
 import com.dlq.yygh.model.hosp.Hospital;
+import com.dlq.yygh.model.hosp.Schedule;
 import com.dlq.yygh.utils.MD5;
 import com.dlq.yygh.vo.hosp.DepartmentQueryVo;
-import com.sun.org.apache.regexp.internal.RE;
+import com.dlq.yygh.vo.hosp.ScheduleQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
@@ -38,6 +40,9 @@ public class ApiController {
     private HospitalSetService hospitalSetService;
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private ScheduleService scheduleService;
+
 
     /**
      * 查询医院接口
@@ -79,11 +84,13 @@ public class ApiController {
         Map<String, Object> paramMap = checkSignKey(request);
         //医院编号
         String hoscode = (String) paramMap.get("hoscode");
+        String depcode = (String) paramMap.get("depcode");
         int page = StringUtils.isEmpty(paramMap.get("page")) ? 1 : Integer.parseInt(paramMap.get("page").toString());
         int limit = StringUtils.isEmpty(paramMap.get("limit")) ? 1 : Integer.parseInt(paramMap.get("limit").toString());
 
         DepartmentQueryVo departmentQueryVo = new DepartmentQueryVo();
         departmentQueryVo.setHoscode(hoscode);
+        departmentQueryVo.setDepcode(depcode);
 
         Page<Department> pageModel = departmentService.getPageDepartment(page,limit,departmentQueryVo);
         return Result.ok(pageModel);
@@ -118,6 +125,54 @@ public class ApiController {
         }
 
     }
+
+    /**
+     * 上传排班接口
+     */
+    @PostMapping("/saveSchedule")
+    public Result saveSchedule(HttpServletRequest request){
+        Map<String, Object> paramMap = checkSignKey(request);
+
+        scheduleService.saveSchedule(paramMap);
+        return Result.ok();
+    }
+
+    /**
+     * 查询排班接口
+     */
+    @PostMapping("/schedule/list")
+    public Result findSchedule(HttpServletRequest request){
+        Map<String, Object> paramMap = checkSignKey(request);
+        //医院编号
+        String hoscode = (String) paramMap.get("hoscode");
+        int page = StringUtils.isEmpty(paramMap.get("page")) ? 1 : Integer.parseInt(paramMap.get("page").toString());
+        int limit = StringUtils.isEmpty(paramMap.get("limit")) ? 1 : Integer.parseInt(paramMap.get("limit").toString());
+
+        ScheduleQueryVo scheduleQueryVo = new ScheduleQueryVo();
+        scheduleQueryVo.setHoscode(hoscode);
+
+        Page<Schedule> pageModel = scheduleService.getPageSchedule(page,limit,scheduleQueryVo);
+        return Result.ok(pageModel);
+    }
+
+    /**
+     * 删除排班接口
+     */
+    @PostMapping("/schedule/remove")
+    public Result delSchedule(HttpServletRequest request){
+        Map<String, Object> paramMap = checkSignKey(request);
+        //医院编号和排班编号
+        String hoscode = (String) paramMap.get("hoscode");
+        String hosScheduleId = (String) paramMap.get("hosScheduleId");
+
+        boolean resultDel = scheduleService.delSchedule(hoscode,hosScheduleId);
+        if (resultDel){
+            return Result.ok();
+        }else {
+            return Result.fail();
+        }
+    }
+
 
     private Map<String, Object> checkSignKey(HttpServletRequest request){
         //获取到传递过来的医院信息
