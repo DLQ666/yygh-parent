@@ -2,6 +2,7 @@ package com.dlq.yygh.hosp.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.dlq.yygh.hosp.feign.CmnFeignService;
 import com.dlq.yygh.hosp.repository.HospitalRepository;
 import com.dlq.yygh.hosp.service.HospitalService;
 import com.dlq.yygh.model.hosp.Hospital;
@@ -25,6 +26,8 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Autowired
     private HospitalRepository hospitalRepository;
+    @Autowired
+    private CmnFeignService cmnFeignService;
 
     /**
      * 上传医院接口
@@ -91,6 +94,23 @@ public class HospitalServiceImpl implements HospitalService {
         //创建对象
         Example<Hospital> example = Example.of(hospital,matcher);
         //调用方法直接查询
-        return hospitalRepository.findAll(example,pageable);
+        Page<Hospital> pages = hospitalRepository.findAll(example, pageable);
+
+        //获取查询list集合，遍历进行医院等级封装
+        pages.getContent().forEach(this::setHospitalHosType);
+        return pages;
+    }
+
+    //获取查询list集合，遍历 进行 医院等级封装
+    private Hospital setHospitalHosType(Hospital hospital){
+        //根据dictCode和value获取医院等级名称
+        String hostypeString = cmnFeignService.getName("Hostype", hospital.getHostype());
+        //查询省 市 地区
+        String provinceString = cmnFeignService.getName(hospital.getProvinceCode());
+        String cityString = cmnFeignService.getName(hospital.getCityCode());
+        String districtString = cmnFeignService.getName(hospital.getDistrictCode());
+        hospital.getParam().put("hostypeString",hostypeString);
+        hospital.getParam().put("fullAddress",provinceString+" "+cityString+" "+districtString);
+        return hospital;
     }
 }

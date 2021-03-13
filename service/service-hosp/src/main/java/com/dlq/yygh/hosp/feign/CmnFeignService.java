@@ -1,6 +1,7 @@
 package com.dlq.yygh.hosp.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  *@author: Hasee
  *@create: 2021-03-13 16:00
  */
+@Component
 @FeignClient("service-cmn")
 public interface CmnFeignService {
 
