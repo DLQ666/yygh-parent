@@ -7,11 +7,8 @@ import com.dlq.yygh.cmn.listener.DictListener;
 import com.dlq.yygh.cmn.mapper.DictMapper;
 import com.dlq.yygh.cmn.service.DictService;
 import com.dlq.yygh.model.cmn.Dict;
-import com.dlq.yygh.model.hosp.Hospital;
 import com.dlq.yygh.vo.cmn.DictEeVo;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -111,6 +108,24 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                     .eq("parent_id", parent_id).eq("value", value));
             return selectOne.getName();
         }
+    }
+
+    /**
+     * 根据dictCode获取下级节点
+     */
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        //根据dictCode获取对应id
+        Dict dict = this.getDictCodeByDictCode(dictCode);
+        if (dict == null){
+            return null;
+        }
+        //获取子节点
+        List<Dict> chlidData = this.findChlidData(dict.getId());
+        if (chlidData != null){
+            return chlidData;
+        }
+        return null;
     }
 
     private Dict getDictCodeByDictCode(String dictCode){

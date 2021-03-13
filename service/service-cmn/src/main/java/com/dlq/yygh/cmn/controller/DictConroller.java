@@ -4,6 +4,7 @@ import com.dlq.yygh.cmn.service.DictService;
 import com.dlq.yygh.common.result.Result;
 import com.dlq.yygh.model.cmn.Dict;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,5 +59,15 @@ public class DictConroller {
     public String getName(@PathVariable("value")String value){
         String dictName = dictService.getDictName("",value);
         return dictName;
+    }
+
+    /**
+     * 根据dictCode获取下级节点
+     */
+    @ApiOperation(value = "根据dictCode获取下级节点")
+    @GetMapping(value = "/findByDictCode/{dictCode}")
+    public Result<List<Dict>> findByDictCode(@PathVariable("dictCode")String dictCode){
+        List<Dict> list = dictService.findByDictCode(dictCode);
+        return Result.ok(list);
     }
 }
