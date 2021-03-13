@@ -9,16 +9,17 @@ import com.dlq.yygh.hosp.service.HospitalService;
 import com.dlq.yygh.hosp.service.HospitalSetService;
 import com.dlq.yygh.model.hosp.Department;
 import com.dlq.yygh.model.hosp.Hospital;
-import com.dlq.yygh.model.hosp.HospitalSet;
 import com.dlq.yygh.utils.MD5;
+import com.dlq.yygh.vo.hosp.DepartmentQueryVo;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,8 +76,17 @@ public class ApiController {
      */
     @PostMapping("/department/list")
     public Result getDepartment(HttpServletRequest request){
-        List<Department> departmentList = departmentService.getDepartment(request);
-        return Result.ok(departmentList);
+        Map<String, Object> paramMap = checkSignKey(request);
+        //医院编号
+        String hoscode = (String) paramMap.get("hoscode");
+        int page = StringUtils.isEmpty(paramMap.get("page")) ? 1 : Integer.parseInt(paramMap.get("page").toString());
+        int limit = StringUtils.isEmpty(paramMap.get("limit")) ? 1 : Integer.parseInt(paramMap.get("limit").toString());
+
+        DepartmentQueryVo departmentQueryVo = new DepartmentQueryVo();
+        departmentQueryVo.setHoscode(hoscode);
+
+        Page<Department> pageModel = departmentService.getPageDepartment(page,limit,departmentQueryVo);
+        return Result.ok(pageModel);
     }
 
     /**
@@ -88,6 +98,25 @@ public class ApiController {
 
         departmentService.saveDepartment(paramMap);
         return Result.ok();
+    }
+
+    /**
+     * 删除科室接口
+     */
+    @PostMapping("/department/remove")
+    public Result delDepartment(HttpServletRequest request){
+        Map<String, Object> paramMap = checkSignKey(request);
+        //医院编号
+        String hoscode = (String) paramMap.get("hoscode");
+        String depcode = (String) paramMap.get("depcode");
+
+        boolean resultDel = departmentService.delDepartment(hoscode,depcode);
+        if (resultDel){
+            return Result.ok();
+        }else {
+            return Result.fail();
+        }
+
     }
 
     private Map<String, Object> checkSignKey(HttpServletRequest request){
