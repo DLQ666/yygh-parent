@@ -26,4 +26,14 @@ public interface HospitalService {
      * 查询医院列表
      */
     Page<Hospital> selectHospPage(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo);
+
+    /**
+     * 更新医院上线状态
+     */
+    void updateHospStatus(String id, Integer status);
+
+    /**
+     * 医院详情
+     */
+    Map<String, Object> getHospById(String id);
 }
