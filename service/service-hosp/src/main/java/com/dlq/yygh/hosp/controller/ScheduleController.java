@@ -42,7 +42,7 @@ public class ScheduleController {
     @GetMapping("/getScheduleDetail/{hoscode}/{depcode}/{workDate}")
     public Result getScheduleDetail(@PathVariable("hoscode")String hoscode,
                                     @PathVariable("depcode")String depcode,
-                                    @PathVariable("depcode")String workDate){
+                                    @PathVariable("workDate")String workDate){
         List<Schedule> list = scheduleService.getDetailSchedule(hoscode,depcode,workDate);
         return Result.ok(list);
     }
