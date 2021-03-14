@@ -14,7 +14,6 @@ import java.util.List;
  *@author: Hasee
  *@create: 2021-03-13 21:22
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/admin/hosp/department")
 public class DepartmentController {

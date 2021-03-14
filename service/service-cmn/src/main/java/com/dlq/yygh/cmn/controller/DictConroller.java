@@ -19,7 +19,6 @@ import java.util.List;
  *@create: 2021-03-11 17:09
  */
 @Api(tags = "字典管理")
-@CrossOrigin
 @RestController
 @RequestMapping("/admin/cmn/dict")
 public class DictConroller {
