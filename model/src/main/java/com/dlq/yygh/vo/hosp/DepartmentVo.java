@@ -1,5 +1,6 @@
 package com.dlq.yygh.vo.hosp;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class DepartmentVo {
 	private String depname;
 
 	@ApiModelProperty(value = "下级节点")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private List<DepartmentVo> children;
 
 }
