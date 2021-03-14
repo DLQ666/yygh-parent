@@ -143,7 +143,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public String getDepName(String hoscode, String depcode) {
         Department department = departmentRepository.getDepartmentByHoscodeAndDepcode(hoscode, depcode);
         if (department == null){
-            return null;
+            return "";
         }
         return department.getDepname();
     }

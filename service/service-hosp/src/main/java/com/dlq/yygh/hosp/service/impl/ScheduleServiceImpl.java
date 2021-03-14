@@ -176,6 +176,9 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public List<Schedule> getDetailSchedule(String hoscode, String depcode, String workDate) {
+        if ("null".equals(hoscode) || "null".equals(depcode) || "null".equals(workDate)){
+            return null;
+        }
         //根据参数查询monggodb
         List<Schedule> list =
                 scheduleRepository.findScheduleByHoscodeAndDepcodeAndWorkDate(hoscode,depcode,new DateTime(workDate).toDate());
