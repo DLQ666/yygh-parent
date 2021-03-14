@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -138,6 +139,14 @@ public class HospitalServiceImpl implements HospitalService {
             return hospital.getHosname();
         }
         return null;
+    }
+
+    /**
+     * 根据医院名称获取医院列表
+     */
+    @Override
+    public List<Hospital> findByHosname(String hosname) {
+        return hospitalRepository.findHospitalByHosnameLike(hosname);
     }
 
     //获取查询list集合，遍历 进行 医院等级封装
