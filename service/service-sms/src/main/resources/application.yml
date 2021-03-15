@@ -1,0 +1,6 @@
+#server:
+#  port: 8213
+#spring:
+#  application:
+#    name: service-sms
+#
