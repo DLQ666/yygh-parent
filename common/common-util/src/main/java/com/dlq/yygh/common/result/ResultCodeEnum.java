@@ -42,6 +42,9 @@ public enum ResultCodeEnum {
     SIGN_ERROR(300, "签名错误"),
     HOSPITAL_OPEN(310, "医院未开通，暂时不能访问"),
     HOSPITAL_LOCK(320, "医院被锁定，暂时不能访问"),
+
+    SMS_SEND_ERROR_BUSINESS_LIMIT_CONTROL(410,"发送短信过于频繁"),
+    SMS_SEND_ERROR(420,"短信发送失败"),
     ;
 
     private Integer code;
