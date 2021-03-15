@@ -9,4 +9,8 @@ spring:
         server-addr: 182.42.109.129:8848  #nacos服务地址http://182.42.109.129:8848/nacos/#/login
         file-extension: yaml # 配置文件格式，如果是properties文件则不用配置此项
         namespace: 316f545d-2359-439f-9c2b-adcdabd1f5e5
+        extension-configs:
+          - dataId: sms.yml
+            group: DEFAULT_GROUP
+            refresh: true
 

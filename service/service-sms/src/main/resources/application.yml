@@ -3,4 +3,30 @@
 #spring:
 #  application:
 #    name: service-sms
-#
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 182.42.109.129:8848
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8
+#  redis:
+#    host: 182.42.109.129
+#    port: 6379
+
+#    database: 10
+#    timeout: 1800000
+#    lettuce:
+#      pool:
+#        max-active: 20
+#        max-wait: -1
+#        max-idle: 5
+#        min-idle: 0
+##阿里云短信
+#aliyun:
+#  sms:
+#    regionId: cn-hangzhou
+#    keyId: LTAI4GKauWVZybqU8uYhAqf1
+#    keySecret: ri4WsWdY3RL4DrXuXXQo1wxiIhpC0F
+#    templateCode: SMS_187240015
+#    signName: JAVA社区项目
