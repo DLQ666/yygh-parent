@@ -14,6 +14,7 @@
         <module>service-hosp</module>
         <module>service-cmn</module>
         <module>service-sms</module>
+        <module>service-oss</module>
     </modules>
 
     <artifactId>service</artifactId>
