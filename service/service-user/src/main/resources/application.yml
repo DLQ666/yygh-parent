@@ -18,3 +18,11 @@
 #  data:
 #    mongodb:
 #      uri: mongodb://yygh_hosp:dlq.*123@182.42.109.129:27017/yygh_hosp
+#  session:
+#    store-type: redis
+#wx:
+#  open:
+#    app-id: wxed9954c01bb89b47
+#    app-secret: a7482517235173ddb4083788de60b90e
+#    redirect-uri: http://guli.shop/api/ucenter/wx/callback
+#    base-uri: http://localhost:3000

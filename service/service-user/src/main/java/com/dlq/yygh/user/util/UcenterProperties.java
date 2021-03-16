@@ -18,4 +18,5 @@ public class UcenterProperties {
     private String appId;
     private String appSecret;
     private String redirectUri;
+    private String baseUri;
 }
