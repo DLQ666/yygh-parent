@@ -10,6 +10,8 @@ import com.dlq.yygh.model.user.UserInfo;
 import com.dlq.yygh.user.mapper.UserInfoMapper;
 import com.dlq.yygh.user.service.UserInfoService;
 import com.dlq.yygh.vo.user.LoginVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +26,9 @@ import java.util.Map;
  */
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
+
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     /**
      * 用户手机号登录
@@ -40,6 +45,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
 
         //TODO 判断手机验证码和输入的验证码是否一致
+        String redisCode = redisTemplate.opsForValue().get(phone);
+        if (!code.equals(redisCode)){
+            throw new YyghException(ResultCodeEnum.CODE_ERROR);
+        }
 
         //判断是否是第一次登录 ： 根据手机号查询数据库，如果不存在相同手机号就是第一次登陆
         QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
