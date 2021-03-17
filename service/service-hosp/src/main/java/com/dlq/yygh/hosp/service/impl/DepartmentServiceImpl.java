@@ -39,15 +39,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = JSON.parseObject(jsonString, Department.class);
 
         //根据医院编号 和 科室编号查询
-        Department departmentExist = departmentRepository.getDepartmentByHoscodeAndDepcode(department.getHoscode(),department.getDepcode());
+        Department departmentExist = departmentRepository.getDepartmentByHoscodeAndDepcode(department.getHoscode(), department.getDepcode());
         //判断
-        if (departmentExist != null){
+        if (departmentExist != null) {
             department.setId(departmentExist.getId());
             department.setCreateTime(departmentExist.getCreateTime());
             department.setUpdateTime(new Date());
             department.setIsDeleted(0);
             departmentRepository.save(department);
-        }else {
+        } else {
             department.setCreateTime(new Date());
             department.setUpdateTime(new Date());
             department.setIsDeleted(0);
@@ -63,11 +63,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (page <= 0) {
             page = 1;
         }
-        if (limit <= 0){
+        if (limit <= 0) {
             limit = 10;
         }
         //创建pageable对象，设置当前页和每页记录数
-        Pageable pageable = PageRequest.of(page-1, limit);
+        Pageable pageable = PageRequest.of(page - 1, limit);
         //创建Example对象
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
@@ -75,7 +75,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = new Department();
         BeanUtils.copyProperties(departmentQueryVo, department);
         department.setIsDeleted(0);
-        Example<Department> example = Example.of(department,matcher);
+        Example<Department> example = Example.of(department, matcher);
         Page<Department> all = departmentRepository.findAll(example, pageable);
         return all;
     }
@@ -118,7 +118,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
             //封装小科室 集合
             ArrayList<DepartmentVo> children = new ArrayList<>();
-            departments.forEach(item->{
+            departments.forEach(item -> {
                 DepartmentVo vo = new DepartmentVo();
                 vo.setDepcode(item.getDepcode());
                 vo.setDepname(item.getDepname());
@@ -142,9 +142,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public String getDepName(String hoscode, String depcode) {
         Department department = departmentRepository.getDepartmentByHoscodeAndDepcode(hoscode, depcode);
-        if (department == null){
+        if (department == null) {
             return "";
         }
         return department.getDepname();
+    }
+
+    /**
+     * 根据科室编号、医院编号、查询科室
+     */
+    @Override
+    public Department getDepartment(String hoscode, String depcode) {
+        return departmentRepository.getDepartmentByHoscodeAndDepcode(hoscode, depcode);
     }
 }
