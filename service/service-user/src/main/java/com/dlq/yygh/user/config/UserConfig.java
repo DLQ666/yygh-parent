@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  *@author: Hasee
  *@create: 2021-03-15 17:18
  */
-@EnableFeignClients
 @ComponentScan(basePackages = "com.dlq.yygh")
 @MapperScan("com.dlq.yygh.user.mapper")
 @Configuration
