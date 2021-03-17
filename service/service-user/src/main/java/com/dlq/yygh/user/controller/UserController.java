@@ -30,17 +30,26 @@ public class UserController {
      * 用户列表 （条件分页查询）
      */
     @GetMapping("/{page}/{limit}")
-    public Result list(@PathVariable("page")long page,
-                       @PathVariable("limit")long limit,
-                       UserInfoQueryVo userInfoQueryVo){
+    public Result list(@PathVariable("page") long page,
+                       @PathVariable("limit") long limit,
+                       UserInfoQueryVo userInfoQueryVo) {
         if (page <= 0) {
             page = 1;
         }
-        if (limit <= 0){
+        if (limit <= 0) {
             limit = 10;
         }
-        Page<UserInfo> pageParam =  new Page<>(page,limit);
-        IPage<UserInfo> pageModel = userInfoService.selectPage(pageParam,userInfoQueryVo);
+        Page<UserInfo> pageParam = new Page<>(page, limit);
+        IPage<UserInfo> pageModel = userInfoService.selectPage(pageParam, userInfoQueryVo);
         return Result.ok(pageModel);
+    }
+
+    /**
+     * 用户锁定
+     */
+    @GetMapping("/lock/{userId}/{status}")
+    public Result lockUser(@PathVariable("userId") Long userId, @PathVariable("status") Integer status) {
+        userInfoService.lock(userId, status);
+        return Result.ok();
     }
 }
