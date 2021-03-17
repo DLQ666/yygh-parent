@@ -300,6 +300,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     /**
+     * 根据排班id获取排班数据
+     */
+    @Override
+    public Schedule getScheduleById(String scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).get();
+        this.packageSchedule(schedule);
+        return schedule;
+    }
+
+    /**
      * 获取可预约日期分页数据
      */
     private IPage getListDate(Integer page, Integer limit, BookingRule bookingRule) {
