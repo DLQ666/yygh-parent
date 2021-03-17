@@ -39,6 +39,16 @@ public class PatientServiceImpl extends ServiceImpl<PatientMapper,Patient> imple
     }
 
     /**
+     * 根据id获取就诊人信息
+     */
+    @Override
+    public Patient getPatientId(Long id) {
+        Patient patient = baseMapper.selectById(id);
+        this.packPatient(patient);
+        return patient;
+    }
+
+    /**
      * Patient 其他参数封装
      */
     private void packPatient(Patient patient) {
