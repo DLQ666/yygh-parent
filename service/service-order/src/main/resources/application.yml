@@ -1,0 +1,17 @@
+#server:
+#  port: 8215
+#spring:
+#  application:
+#    name: service-order
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://182.42.109.129:3306/yygh_order?characterEncoding=utf-8&useSSL=false
+#    username: root
+#    password: dlq.*123
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 182.42.109.129:8848
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8

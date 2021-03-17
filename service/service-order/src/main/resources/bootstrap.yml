@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev  #环境设置 dev:开发 test:测试 prod:生产
+  application:
+    name: service-order  #服务名
+  cloud:
+    nacos:
+      config:
+        server-addr: 182.42.109.129:8848  #nacos服务地址http://182.42.109.129:8848/nacos/#/login
+        file-extension: yaml # 配置文件格式，如果是properties文件则不用配置此项
+        namespace: 384037a1-2fa6-4cbd-9d93-94ecb65df17b
