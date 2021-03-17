@@ -9,10 +9,8 @@ import com.dlq.yygh.common.result.Result;
 import com.dlq.yygh.oss.service.OssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,8 +41,13 @@ public class OssApiController {
     @Autowired
     private OssService ossService;
 
+    @PostMapping("/fileUpload")
+    public Result fileUpload(MultipartFile file){
+        String url = ossService.fileupload(file);
+        return Result.ok(url);
+    }
     @GetMapping("/policy")
-    public Result fileUpload(){
+    public Result policy(){
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
         // callbackUrl为 上传回调服务器的URL，请将下面的IP和Port配置为您自己的真实信息。
 //        String callbackUrl = "http://88.88.88.88:8888";

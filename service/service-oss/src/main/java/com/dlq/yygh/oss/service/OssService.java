@@ -1,5 +1,7 @@
 package com.dlq.yygh.oss.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  *@program: yygh-parent
  *@description:
@@ -8,4 +10,6 @@ package com.dlq.yygh.oss.service;
  */
 public interface OssService {
     void removeLogo(String url);
+
+    String fileupload(MultipartFile file);
 }

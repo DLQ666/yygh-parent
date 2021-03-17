@@ -2,11 +2,18 @@ package com.dlq.yygh.oss.service.impl;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.CannedAccessControlList;
 import com.dlq.yygh.oss.service.OssService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 
 /**
  *@program: yygh-parent
@@ -52,6 +59,46 @@ public class OssServiceImpl implements OssService {
             log.info(e.getMessage());
         } finally {
             ossClient.shutdown();
+        }
+    }
+
+    @Override
+    public String fileupload(MultipartFile file) {
+
+        try {
+            InputStream inputStream = file.getInputStream();
+            String originalFilename = file.getOriginalFilename();
+
+            // 创建OSSClient实例。
+            OSS ossClient = new OSSClientBuilder().build(endpoint, accessId, secretId);
+            //首先判断bucket存在不，如果不存在则创建
+            if (!ossClient.doesBucketExist(bucket)) {
+                ossClient.createBucket(bucket);
+                ossClient.setBucketAcl(bucket, CannedAccessControlList.PublicRead);
+            }
+
+            //构建objectName：文件路径 2020/06/17/46348b9e0caa4e838d0325101a792941file.png
+            //把文件按照日期进行分类存储
+            //获取当前日期
+            String floder = new DateTime().toString("yyyy/MM/dd");
+            //拼接
+            String fileName = UUID.randomUUID().toString();
+            String module = "zhengjian";
+            String fileExtesion = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String key = module + "/" + floder + "/" + fileName + fileExtesion;
+
+            //调用oss方法实现上传
+            //参数1：bucket名称  参数2：上传到oss文件路径和名称  例:/aa/bb/1.jpg  参数3：上传文件输入流
+            ossClient.putObject(bucket, key, inputStream);
+
+            // 关闭OSSClient。
+            ossClient.shutdown();
+
+            //返回url https://dlqedu-01.oss-cn-beijing.aliyuncs.com/2020/06/17/46348b9e0caa4e838d0325101a792941file.png
+            return "https://" + bucket + "." + endpoint + "/" + key;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
