@@ -2,6 +2,7 @@ package com.dlq.yygh.user.controller;
 
 import com.dlq.yygh.common.result.Result;
 import com.dlq.yygh.common.utils.AuthContextHolder;
+import com.dlq.yygh.enums.AuthStatusEnum;
 import com.dlq.yygh.model.user.UserInfo;
 import com.dlq.yygh.user.service.UserInfoService;
 import com.dlq.yygh.vo.user.LoginVo;
@@ -51,6 +52,7 @@ public class UserInfoApiController {
     public Result<UserInfo> getUserInfo(HttpServletRequest request){
         Long userId = AuthContextHolder.getUserId(request);
         UserInfo userInfo = userInfoService.getById(userId);
+        userInfo.getParam().put("authStatusString", AuthStatusEnum.getStatusNameByStatus(userInfo.getAuthStatus()));
         return Result.ok(userInfo);
     }
 }
