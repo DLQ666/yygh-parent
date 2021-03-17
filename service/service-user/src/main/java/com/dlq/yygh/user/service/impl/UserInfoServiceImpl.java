@@ -9,8 +9,10 @@ import com.dlq.yygh.common.exception.YyghException;
 import com.dlq.yygh.common.healper.JwtHelper;
 import com.dlq.yygh.common.result.ResultCodeEnum;
 import com.dlq.yygh.enums.AuthStatusEnum;
+import com.dlq.yygh.model.user.Patient;
 import com.dlq.yygh.model.user.UserInfo;
 import com.dlq.yygh.user.mapper.UserInfoMapper;
+import com.dlq.yygh.user.service.PatientService;
 import com.dlq.yygh.user.service.UserInfoService;
 import com.dlq.yygh.vo.user.LoginVo;
 import com.dlq.yygh.vo.user.UserAuthVo;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +37,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+    @Autowired
+    private PatientService patientService;
 
     /**
      * 用户手机号登录
@@ -184,12 +189,29 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         }
     }
 
+    /**
+     * 用户详情
+     */
+    @Override
+    public Map<String, Object> show(Long userId) {
+        Map<String,Object> map = new HashMap<>();
+        //根据用户id 查询出用户信息
+        UserInfo userInfo = this.packageUserInfo(baseMapper.selectById(userId));
+        map.put("userInfo",userInfo);
+        //根据userid查询出就诊人信息
+        List<Patient> patientList = patientService.findAllUserId(userId);
+        map.put("patientList",patientList);
+
+        return map;
+    }
+
     //编号变成对应值封装
-    private void packageUserInfo(UserInfo userInfo) {
+    private UserInfo packageUserInfo(UserInfo userInfo) {
         //处理认证状态编码
         userInfo.getParam().put("authStatusString", AuthStatusEnum.getStatusNameByStatus(userInfo.getAuthStatus()));
         //处理用户状态
         String statusString =  userInfo.getStatus().intValue() == 0 ? "锁定" : "正常";
         userInfo.getParam().put("statusString",statusString);
+        return userInfo;
     }
 }

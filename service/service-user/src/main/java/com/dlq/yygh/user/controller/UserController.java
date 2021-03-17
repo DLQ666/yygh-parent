@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  *@program: yygh-parent
  *@description:
@@ -51,5 +53,14 @@ public class UserController {
     public Result lockUser(@PathVariable("userId") Long userId, @PathVariable("status") Integer status) {
         userInfoService.lock(userId, status);
         return Result.ok();
+    }
+
+    /**
+     * 用户详情
+     */
+    @GetMapping("/show/{userId}")
+    public Result show(@PathVariable("userId")Long userId){
+        Map<String,Object> map = userInfoService.show(userId);
+        return Result.ok(map);
     }
 }
