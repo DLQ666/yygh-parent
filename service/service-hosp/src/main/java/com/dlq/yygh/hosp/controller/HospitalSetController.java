@@ -7,8 +7,10 @@ import com.dlq.yygh.hosp.service.HospitalSetService;
 import com.dlq.yygh.model.hosp.HospitalSet;
 import com.dlq.yygh.utils.MD5;
 import com.dlq.yygh.vo.hosp.HospitalSetQueryVo;
+import com.dlq.yygh.vo.order.SignInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -147,5 +149,13 @@ public class HospitalSetController {
         String hoscode = hospitalSet.getHoscode();
         //TODO 发送短信
         return Result.ok();
+    }
+
+    @ApiOperation(value = "获取医院签名信息")
+    @GetMapping("inner/getSignInfoVo/{hoscode}")
+    public SignInfoVo getSignInfoVo(
+            @ApiParam(name = "hoscode", value = "医院code", required = true)
+            @PathVariable("hoscode") String hoscode) {
+        return hospitalSetService.getSignInfoVo(hoscode);
     }
 }
