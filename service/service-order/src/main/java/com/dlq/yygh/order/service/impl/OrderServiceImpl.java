@@ -14,4 +14,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> implements OrderService {
+
+    /**
+     * 创建订单
+     */
+    @Override
+    public Long saveOrder(String scheduleId, Long patientId) {
+        return null;
+    }
 }

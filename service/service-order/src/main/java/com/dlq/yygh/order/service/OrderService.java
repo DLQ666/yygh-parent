@@ -9,4 +9,8 @@ import com.dlq.yygh.model.order.OrderInfo;
  *@create: 2021-03-17 20:13
  */
 public interface OrderService extends IService<OrderInfo> {
+    /**
+     * 创建订单
+     */
+    Long saveOrder(String scheduleId, Long patientId);
 }
