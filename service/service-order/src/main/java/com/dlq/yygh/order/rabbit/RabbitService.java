@@ -2,6 +2,7 @@ package com.dlq.yygh.order.rabbit;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *@program: yygh-parent
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *@author: Hasee
  *@create: 2021-03-18 17:26
  */
+@Service
 public class RabbitService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
