@@ -68,7 +68,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
         //向orderInfo设置其他数据
         String outTradeNo = System.currentTimeMillis() + ""+ new Random().nextInt(100);
         orderInfo.setOutTradeNo(outTradeNo);
-        orderInfo.setScheduleId(scheduleId);
+        orderInfo.setScheduleId(scheduleOrderVo.getHosScheduleId());
         orderInfo.setUserId(patient.getUserId());
         orderInfo.setPatientId(patientId);
         orderInfo.setPatientName(patient.getName());
