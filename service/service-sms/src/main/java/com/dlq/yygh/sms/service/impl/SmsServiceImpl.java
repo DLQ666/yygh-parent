@@ -10,10 +10,12 @@ import com.dlq.yygh.common.exception.YyghException;
 import com.dlq.yygh.common.result.ResultCodeEnum;
 import com.dlq.yygh.sms.service.SmsService;
 import com.dlq.yygh.sms.util.SmsProperties;
+import com.dlq.yygh.vo.msm.MsmVo;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,5 +88,23 @@ public class SmsServiceImpl implements SmsService {
         } catch (Exception e) {
             throw new YyghException(ResultCodeEnum.SMS_SEND_ERROR);
         }
+    }
+
+    /**
+     * mq使用发送短信
+     */
+    @Override
+    public boolean send(MsmVo msmVo) {
+        if (!StringUtils.isEmpty(msmVo.getPhone())){
+            String code = (String) msmVo.getParam().get("code");
+            try {
+                this.send(msmVo.getPhone(),code);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
     }
 }

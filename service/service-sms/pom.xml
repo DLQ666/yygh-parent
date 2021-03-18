@@ -12,6 +12,11 @@
     <artifactId>service-sms</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.dlq</groupId>
+            <artifactId>service-order</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--阿里云短信-->
         <dependency>
             <groupId>com.aliyun</groupId>
