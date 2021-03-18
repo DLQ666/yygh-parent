@@ -1,6 +1,7 @@
 package com.dlq.yygh.order.controller;
 
 import com.dlq.yygh.common.result.Result;
+import com.dlq.yygh.model.order.OrderInfo;
 import com.dlq.yygh.order.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,5 +28,14 @@ public class OrderApiController {
                             @PathVariable("patientId")Long patientId){
         Long order = orderService.saveOrder(scheduleId,patientId);
         return Result.ok(order);
+    }
+
+    /**
+     * 根据订单id查询订单详情
+     */
+    @GetMapping("/auth/getOrders/{orderId}")
+    public Result getOrders(@PathVariable("orderId")String orderId){
+        OrderInfo orderInfo = orderService.getOrder(orderId);
+        return Result.ok(orderInfo);
     }
 }

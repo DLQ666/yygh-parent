@@ -160,4 +160,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
         }
         return orderInfo.getId();
     }
+
+    /**
+     * 根据订单id查询订单详情
+     */
+    @Override
+    public OrderInfo getOrder(String orderId) {
+        OrderInfo orderInfo = baseMapper.selectById(orderId);
+        return this.packOrderInfo(orderInfo);
+    }
+
+    private OrderInfo packOrderInfo(OrderInfo orderInfo) {
+        orderInfo.getParam().put("orderStatusString", OrderStatusEnum.getStatusNameByStatus(orderInfo.getOrderStatus()));
+        return orderInfo;
+    }
 }
