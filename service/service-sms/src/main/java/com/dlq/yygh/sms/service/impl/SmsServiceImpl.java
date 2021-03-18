@@ -96,9 +96,8 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public boolean send(MsmVo msmVo) {
         if (!StringUtils.isEmpty(msmVo.getPhone())){
-            String code = (String) msmVo.getParam().get("code");
             try {
-                this.send(msmVo.getPhone(),code);
+                this.send(msmVo.getPhone(),msmVo.getParam());
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -106,5 +105,61 @@ public class SmsServiceImpl implements SmsService {
             }
         }
         return false;
+    }
+
+    private void send(String mobile, Map<String ,Object> map) {
+        //创建配置对象
+        DefaultProfile profile = DefaultProfile.getProfile(smsProperties.getRegionId(),
+                smsProperties.getKeyId(), smsProperties.getKeySecret());
+
+        //创建client对象
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        //创建并组装参数
+        CommonRequest request = new CommonRequest();
+        //组装参数对象
+        //request.setSysProtocol(ProtocolType.HTTPS);
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+
+        request.putQueryParameter("PhoneNumbers", mobile);
+        request.putQueryParameter("SignName", smsProperties.getSignName());
+        request.putQueryParameter("RegionId", smsProperties.getRegionId());
+        request.putQueryParameter("TemplateCode", smsProperties.getTemplateCode());
+        //验证码使用 json 格式
+
+
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+        request.putQueryParameter("TemplateParam", json);
+
+        //发送短信
+        CommonResponse response = null;
+        try {
+
+            response = client.getCommonResponse(request);
+
+            //response.getHttpResponse().isSuccess()//注意：此处不能通过http的响应结果判断短信是否发送成功。如果发送失败的原因是欠费就判断不了
+            //得到json字符串格式的返回结果
+            String data = response.getData();
+            //解析响应结果
+            HashMap<String ,String> hashMap = gson.fromJson(data, HashMap.class);
+            String code = hashMap.get("Code");
+            String message = hashMap.get("Message");
+
+            if ("isv.BUSINESS_LIMIT_CONTROL".equals(code)){
+                log.error("发送短信过于频繁："+"code-"+code+"，message-"+message);
+                throw new YyghException(ResultCodeEnum.SMS_SEND_ERROR_BUSINESS_LIMIT_CONTROL);
+            }
+
+            if (!"OK".equals(code)){
+                log.error("短信发送失败："+"code-"+code+"，message-"+message);
+                throw new YyghException(ResultCodeEnum.SMS_SEND_ERROR);
+            }
+        } catch (Exception e) {
+            throw new YyghException(ResultCodeEnum.SMS_SEND_ERROR);
+        }
     }
 }
