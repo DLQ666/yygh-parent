@@ -1,6 +1,8 @@
 package com.dlq.yygh.hosp.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.dlq.yygh.model.hosp.Schedule;
+import com.dlq.yygh.vo.hosp.ScheduleOrderVo;
 import com.dlq.yygh.vo.hosp.ScheduleQueryVo;
 import org.springframework.data.domain.Page;
 
@@ -12,7 +14,7 @@ import java.util.Map;
  *@author: Hasee
  *@create: 2021-03-13 12:21
  */
-public interface ScheduleService {
+public interface ScheduleService extends IService<Schedule> {
     /**
      * 上传排班接口
      */
@@ -47,4 +49,9 @@ public interface ScheduleService {
      * 根据排班id获取排班数据
      */
     Schedule getScheduleById(String scheduleId);
+
+    /**
+     * 根据排班id获取预约下单数据
+     */
+    ScheduleOrderVo getScheduleOrderVo(String scheduleId);
 }
