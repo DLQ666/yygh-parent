@@ -77,4 +77,13 @@ public class PatientApiController {
             return Result.fail();
         }
     }
+
+    /**
+     * 根据就诊人id 获取就诊人信息
+     */
+    @GetMapping("/inner/get/{id}")
+    public Patient getPatientById(@PathVariable("id")Long id){
+        Patient patient = patientService.getPatientId(id);
+        return patient;
+    }
 }
