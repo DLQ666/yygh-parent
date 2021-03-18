@@ -366,6 +366,15 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
     }
 
     /**
+     * 更新排班数据 用于MQ
+     */
+    @Override
+    public void update(Schedule schedule) {
+        schedule.setUpdateTime(new Date());
+        scheduleRepository.save(schedule);
+    }
+
+    /**
      * 获取可预约日期分页数据
      */
     private IPage getListDate(Integer page, Integer limit, BookingRule bookingRule) {

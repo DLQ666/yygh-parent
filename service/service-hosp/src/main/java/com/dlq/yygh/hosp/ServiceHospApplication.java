@@ -1,5 +1,6 @@
 package com.dlq.yygh.hosp;
 
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -10,6 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  *@author: Hasee
  *@create: 2021-03-10 14:59
  */
+@EnableRabbit
 @EnableFeignClients
 @SpringBootApplication
 public class ServiceHospApplication {

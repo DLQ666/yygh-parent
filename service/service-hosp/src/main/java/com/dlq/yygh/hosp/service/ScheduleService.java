@@ -54,4 +54,9 @@ public interface ScheduleService extends IService<Schedule> {
      * 根据排班id获取预约下单数据
      */
     ScheduleOrderVo getScheduleOrderVo(String scheduleId);
+
+    /**
+     * 更新排班数据 用于MQ
+     */
+    void update(Schedule schedule);
 }
