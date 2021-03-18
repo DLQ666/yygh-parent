@@ -1,6 +1,5 @@
 package com.dlq.yygh.sms.receiver;
 
-import com.dlq.yygh.order.rabbit.constant.MqConst;
 import com.dlq.yygh.sms.service.SmsService;
 import com.dlq.yygh.vo.msm.MsmVo;
 import com.rabbitmq.client.Channel;
