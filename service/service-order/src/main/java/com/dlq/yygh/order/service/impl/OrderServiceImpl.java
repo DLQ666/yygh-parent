@@ -11,8 +11,12 @@ import com.dlq.yygh.model.user.Patient;
 import com.dlq.yygh.order.feign.HospFeignService;
 import com.dlq.yygh.order.feign.UserFeignService;
 import com.dlq.yygh.order.mapper.OrderMapper;
+import com.dlq.yygh.order.rabbit.RabbitService;
+import com.dlq.yygh.order.rabbit.constant.MqConst;
 import com.dlq.yygh.order.service.OrderService;
 import com.dlq.yygh.vo.hosp.ScheduleOrderVo;
+import com.dlq.yygh.vo.msm.MsmVo;
+import com.dlq.yygh.vo.order.OrderMqVo;
 import com.dlq.yygh.vo.order.SignInfoVo;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +40,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
     private HospFeignService hospFeignService;
     @Autowired
     private UserFeignService userFeignService;
+    @Autowired
+    private RabbitService rabbitService;
 
     /**
      * 创建订单
@@ -123,6 +129,32 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
             //排班剩余预约数
             Integer availableNumber = jsonObject.getInteger("availableNumber");
             //发送mq信息更新号源和短信通知
+
+            //发送mq消息进行号源更新
+            OrderMqVo orderMqVo = new OrderMqVo();
+            orderMqVo.setScheduleId(scheduleId);
+            orderMqVo.setReservedNumber(reservedNumber);
+            orderMqVo.setAvailableNumber(availableNumber);
+            //发送消息
+            MsmVo msmVo = new MsmVo();
+            msmVo.setPhone(orderInfo.getPatientPhone());
+            msmVo.setTemplateCode("SMS_187240015");
+            String reserveDate =
+                    new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd")
+                            + (orderInfo.getReserveTime()==0 ? "上午": "下午");
+            Map<String,Object> param = new HashMap<String,Object>(){{
+                put("title", orderInfo.getHosname()+"|"+orderInfo.getDepname()+"|"+orderInfo.getTitle());
+                put("amount", orderInfo.getAmount());
+                put("reserveDate", reserveDate);
+                put("name", orderInfo.getPatientName());
+                put("quitTime", new DateTime(orderInfo.getQuitTime()).toString("yyyy-MM-dd HH:mm"));
+            }};
+            msmVo.setParam(param);
+            orderMqVo.setMsmVo(msmVo);
+
+            //发送消息
+            rabbitService.sendMessage(MqConst.EXCHANGE_DIRECT_ORDER, MqConst.ROUTING_ORDER, orderMqVo);
+
         }else {
             throw new YyghException(result.getString("message"), ResultCodeEnum.FAIL.getCode());
         }
