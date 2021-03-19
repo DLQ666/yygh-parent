@@ -22,4 +22,9 @@ public interface PaymentService extends IService<PaymentInfo> {
      * 更改订单状态，处理支付结果
      */
     void paySuccess(String out_trade_no, Integer status, Map<String, String> resultMap);
+
+    /**
+     * 获取支付记录
+     */
+    PaymentInfo getPaymentInfo(Long orderId, Integer paymentType);
 }

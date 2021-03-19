@@ -20,5 +20,5 @@ public class WeixinPayProperties {
     private String notifyUrl;
     private String orderqueryUrl;
     private String unifiedorderUrl;
-
+    private String cert;
 }
