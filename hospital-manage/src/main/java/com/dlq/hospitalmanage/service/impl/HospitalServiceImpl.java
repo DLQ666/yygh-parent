@@ -61,7 +61,7 @@ public class HospitalServiceImpl implements HospitalService {
 
         if(!schedule.getHoscode().equals(hoscode)
                 || !schedule.getDepcode().equals(depcode)
-                || !schedule.getAmount().toString().equals(amount)) {
+                || !new BigDecimal(schedule.getAmount()).equals(new BigDecimal(amount))) {
             throw new YyghException(ResultCodeEnum.DATA_ERROR);
         }
 
