@@ -41,6 +41,9 @@ public class HttpClient {
     private boolean isCert = false;
     //证书密码 微信商户号（mch_id）
     private String certPassword;
+
+    private WeixinPayProperties weixinPayProperties;
+
     public boolean isHttps() {
         return isHttps;
     }
@@ -65,6 +68,10 @@ public class HttpClient {
     }
     public HttpClient(String url) {
         this.url = url;
+    }
+    public HttpClient(String url,WeixinPayProperties weixinPayProperties) {
+        this.url = url;
+        this.weixinPayProperties = weixinPayProperties;
     }
     public String getCertPassword() {
         return certPassword;
@@ -126,7 +133,7 @@ public class HttpClient {
         try {
             if (isHttps) {
                 if(isCert) {
-                    FileInputStream inputStream = new FileInputStream(new File("ConstantPropertiesUtils.CERT"));
+                    FileInputStream inputStream = new FileInputStream(new File(weixinPayProperties.getCert()));
                     KeyStore keystore = KeyStore.getInstance("PKCS12");
                     char[] partnerId2charArray = certPassword.toCharArray();
                     keystore.load(inputStream, partnerId2charArray);
