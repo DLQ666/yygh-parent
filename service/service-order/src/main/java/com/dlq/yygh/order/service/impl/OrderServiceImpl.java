@@ -1,6 +1,9 @@
 package com.dlq.yygh.order.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dlq.yygh.common.exception.YyghException;
 import com.dlq.yygh.common.result.ResultCodeEnum;
@@ -17,11 +20,13 @@ import com.dlq.yygh.order.service.OrderService;
 import com.dlq.yygh.vo.hosp.ScheduleOrderVo;
 import com.dlq.yygh.vo.msm.MsmVo;
 import com.dlq.yygh.vo.order.OrderMqVo;
+import com.dlq.yygh.vo.order.OrderQueryVo;
 import com.dlq.yygh.vo.order.SignInfoVo;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -168,6 +173,51 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
     public OrderInfo getOrder(String orderId) {
         OrderInfo orderInfo = baseMapper.selectById(orderId);
         return this.packOrderInfo(orderInfo);
+    }
+
+    /**
+     * 订单列表
+     */
+    @Override
+    public IPage<OrderInfo> selectPage(Page<OrderInfo> pageParam, OrderQueryVo orderQueryVo) {
+        Long userId = orderQueryVo.getUserId();
+        //orderQueryVo获取条件值
+        String hosname = orderQueryVo.getKeyword(); // 医院名称
+        Long patientId = orderQueryVo.getPatientId();//就诊人名称
+        String orderStatus = orderQueryVo.getOrderStatus();//订单状态
+        String reserveDate = orderQueryVo.getReserveDate();//安排日期
+        String createTimeBegin = orderQueryVo.getCreateTimeBegin();//开始时间
+        String createTimeEnd = orderQueryVo.getCreateTimeEnd();//结束时间
+        //对条件值进行非空判断
+        QueryWrapper<OrderInfo> wrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(userId)){
+            wrapper.eq("user_id", userId);
+        }
+        if (!StringUtils.isEmpty(hosname)){
+            wrapper.like("hosname", hosname);
+        }
+        if (!StringUtils.isEmpty(patientId)){
+            wrapper.eq("patient_id", patientId);
+        }
+        if (!StringUtils.isEmpty(orderStatus)){
+            wrapper.eq("order_status", orderStatus);
+        }
+        if (!StringUtils.isEmpty(reserveDate)){
+            wrapper.ge("reserve_date", reserveDate);
+        }
+        if (!StringUtils.isEmpty(createTimeBegin)){
+            wrapper.ge("create_time", createTimeBegin);
+        }
+        if (!StringUtils.isEmpty(createTimeEnd)){
+            wrapper.le("create_time", createTimeEnd);
+        }
+
+        //调用mapper方法
+        Page<OrderInfo> pages = baseMapper.selectPage(pageParam, wrapper);
+        //编号变成对应的值
+        pages.getRecords().forEach(this::packOrderInfo);
+
+        return pages;
     }
 
     private OrderInfo packOrderInfo(OrderInfo orderInfo) {
