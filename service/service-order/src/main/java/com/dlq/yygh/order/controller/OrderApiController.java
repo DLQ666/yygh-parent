@@ -74,4 +74,13 @@ public class OrderApiController {
         OrderInfo orderInfo = orderService.getOrder(orderId);
         return Result.ok(orderInfo);
     }
+
+    /**
+     * 取消预约 --- 退款
+     */
+    @GetMapping("/auth/cancelOrder/{orderId}")
+    public Result cancelOrder(@PathVariable("orderId")Long orderId){
+        Boolean isOrder = orderService.cancelOrder(orderId);
+        return Result.ok(isOrder);
+    }
 }

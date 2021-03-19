@@ -26,4 +26,9 @@ public interface OrderService extends IService<OrderInfo> {
      * 订单列表
      */
     IPage<OrderInfo> selectPage(Page<OrderInfo> pageParam, OrderQueryVo orderQueryVo);
+
+    /**
+     * 取消预约 --- 退款
+     */
+    Boolean cancelOrder(Long orderId);
 }
