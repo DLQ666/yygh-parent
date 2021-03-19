@@ -221,6 +221,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
     }
 
     private OrderInfo packOrderInfo(OrderInfo orderInfo) {
+        if (orderInfo == null){
+            return null;
+        }
         orderInfo.getParam().put("orderStatusString", OrderStatusEnum.getStatusNameByStatus(orderInfo.getOrderStatus()));
         return orderInfo;
     }
