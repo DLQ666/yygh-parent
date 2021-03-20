@@ -211,7 +211,7 @@ public class WeixinServiceImpl implements WeixinService {
             client.setHttps(true);
             //设置证书信息
             client.setCert(true);
-            client.setCertPassword(weixinPayProperties.getCert());
+            client.setCertPassword(weixinPayProperties.getPartner());
             client.post();
 
             //3、接收到 返回第三方的数据

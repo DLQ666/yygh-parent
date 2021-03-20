@@ -7,6 +7,7 @@ import com.dlq.yygh.model.order.PaymentInfo;
 import com.dlq.yygh.model.order.RefundInfo;
 import com.dlq.yygh.order.mapper.RefundInfoMapper;
 import com.dlq.yygh.order.service.RefundInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +20,9 @@ import java.util.Date;
  */
 @Service
 public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundInfo> implements RefundInfoService {
+
+    @Autowired
+    private RefundInfoMapper refundInfoMapper;
 
     /**
      * 保存退款记录
@@ -44,6 +48,7 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
         refundInfo.setSubject(paymentInfo.getSubject());
         //paymentInfo.setSubject("test");
         refundInfo.setTotalAmount(paymentInfo.getTotalAmount());
+        refundInfoMapper.insert(refundInfo);
         return refundInfo;
     }
 }

@@ -11,6 +11,7 @@ import java.util.Date;
 @ApiModel(description = "Schedule")
 public class ScheduleOrderVo {
 
+	private String sId;
 	@ApiModelProperty(value = "医院编号")
 	private String hoscode;
 

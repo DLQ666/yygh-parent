@@ -334,6 +334,7 @@ public class ScheduleServiceImpl extends ServiceImpl<ScheduleMapper,Schedule> im
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
         //把获取的数据设置到scheduleOrderVo
+        scheduleOrderVo.setSId(schedule.getId());
         scheduleOrderVo.setHoscode(schedule.getHoscode());
         scheduleOrderVo.setHosname(hospitalService.getHosName(schedule.getHoscode()));
         scheduleOrderVo.setDepcode(schedule.getDepcode());

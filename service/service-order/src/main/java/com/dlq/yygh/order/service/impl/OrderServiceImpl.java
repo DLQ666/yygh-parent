@@ -76,7 +76,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
         //向orderInfo设置其他数据
         String outTradeNo = System.currentTimeMillis() + ""+ new Random().nextInt(100);
         orderInfo.setOutTradeNo(outTradeNo);
-        orderInfo.setScheduleId(scheduleOrderVo.getHosScheduleId());
+        orderInfo.setScheduleId(scheduleOrderVo.getSId());
         orderInfo.setUserId(patient.getUserId());
         orderInfo.setPatientId(patientId);
         orderInfo.setPatientName(patient.getName());
@@ -89,7 +89,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("hoscode",orderInfo.getHoscode());
         paramMap.put("depcode",orderInfo.getDepcode());
-        paramMap.put("hosScheduleId",orderInfo.getScheduleId());
+        paramMap.put("hosScheduleId",scheduleOrderVo.getHosScheduleId());
         paramMap.put("reserveDate",new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd"));
         paramMap.put("reserveTime", orderInfo.getReserveTime());
         paramMap.put("amount",orderInfo.getAmount());
