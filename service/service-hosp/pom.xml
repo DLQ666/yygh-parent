@@ -12,10 +12,10 @@
     <artifactId>service-hosp</artifactId>
 
     <dependencies>
+        <!--引入RabbitMQ-->
         <dependency>
-            <groupId>com.dlq</groupId>
-            <artifactId>service-order</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

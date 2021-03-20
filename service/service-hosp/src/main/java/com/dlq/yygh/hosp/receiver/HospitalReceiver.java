@@ -1,9 +1,8 @@
 package com.dlq.yygh.hosp.receiver;
 
+import com.dlq.yygh.hosp.receiver.constant.MqConst;
 import com.dlq.yygh.hosp.service.ScheduleService;
 import com.dlq.yygh.model.hosp.Schedule;
-import com.dlq.yygh.order.rabbit.RabbitService;
-import com.dlq.yygh.order.rabbit.constant.MqConst;
 import com.dlq.yygh.vo.msm.MsmVo;
 import com.dlq.yygh.vo.order.OrderMqVo;
 import com.rabbitmq.client.Channel;
