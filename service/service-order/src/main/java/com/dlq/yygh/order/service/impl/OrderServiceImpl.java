@@ -20,9 +20,7 @@ import com.dlq.yygh.order.service.OrderService;
 import com.dlq.yygh.order.service.WeixinService;
 import com.dlq.yygh.vo.hosp.ScheduleOrderVo;
 import com.dlq.yygh.vo.msm.MsmVo;
-import com.dlq.yygh.vo.order.OrderMqVo;
-import com.dlq.yygh.vo.order.OrderQueryVo;
-import com.dlq.yygh.vo.order.SignInfoVo;
+import com.dlq.yygh.vo.order.*;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  *@program: yygh-parent
@@ -309,6 +308,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,OrderInfo> impleme
             msmVo.setParam(param);
             rabbitService.sendMessage(MqConst.EXCHANGE_DIRECT_MSM, MqConst.ROUTING_MSM_ITEM, msmVo);
         });
+    }
+
+    /**
+     * 预约统计
+     */
+    @Override
+    public Map<String, Object> getCountMap(OrderCountQueryVo orderCountQueryVo) {
+        //调用mapper方法获取数据
+        List<OrderCountVo> orderCountVoList = baseMapper.selectOrderCount(orderCountQueryVo);
+        //获取x轴需要数据，日期数据 List
+        List<String> dateList = orderCountVoList.stream().map(OrderCountVo::getReserveDate).collect(Collectors.toList());
+        //获取y轴需要数据，统计数量 List
+        List<Integer> countList = orderCountVoList.stream().map(OrderCountVo::getCount).collect(Collectors.toList());
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("dateList", dateList);
+        map.put("countList", countList);
+        return map;
     }
 
     private OrderInfo packOrderInfo(OrderInfo orderInfo) {

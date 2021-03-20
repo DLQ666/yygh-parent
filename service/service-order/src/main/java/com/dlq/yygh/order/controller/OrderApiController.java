@@ -9,6 +9,7 @@ import com.dlq.yygh.helper.HttpRequestHelper;
 import com.dlq.yygh.model.order.OrderInfo;
 import com.dlq.yygh.model.user.UserInfo;
 import com.dlq.yygh.order.service.OrderService;
+import com.dlq.yygh.vo.order.OrderCountQueryVo;
 import com.dlq.yygh.vo.order.OrderQueryVo;
 import com.dlq.yygh.vo.user.UserInfoQueryVo;
 import io.swagger.annotations.Api;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  *@program: yygh-parent
@@ -82,5 +84,14 @@ public class OrderApiController {
     public Result cancelOrder(@PathVariable("orderId")Long orderId){
         Boolean isOrder = orderService.cancelOrder(orderId);
         return Result.ok(isOrder);
+    }
+
+    /**
+     * 获取订单统计数据
+     */
+    @ApiOperation(value = "获取订单统计数据")
+    @PostMapping("/inner/getCountMap")
+    public Map<String, Object> getCountMap(@RequestBody OrderCountQueryVo orderCountQueryVo) {
+        return orderService.getCountMap(orderCountQueryVo);
     }
 }
